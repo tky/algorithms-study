@@ -10,7 +10,7 @@ object Turns extends App {
     dump(low,high)
     if ((high - low) >= 2) {
       ((low + high) / 2) match {
-        case mid if mid == target => 0
+        case mid if mid == target => 1
         case mid if mid < target => 1 + find(target, mid + 1, high)
         case mid if mid >= target => 1 + find(target, low, mid - 1)
       }
