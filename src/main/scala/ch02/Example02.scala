@@ -58,8 +58,41 @@ object Add extends App {
       case (xs, _) => xs
     }
   }
+
+  /*
+   * Nil対応版。
+   * mut1を作るために必要だったけど、、
+  */
+  def execute3 (n1: List[Int], n2: List[Int]): List[Int] = (n1, n2) match {
+    case (n1, Nil) => n1
+    case (Nil, n2) => n2
+    case (n1, n2) => execute2(n1, n2)
+  }
 }
 
+object Mult extends App {
+  private def mult(xs: List[Int], x: Int): List[Int] = {
+    (xs.foldRight(List.empty[Int], 0){ (elem, sum) =>
+      val value = elem * x + sum._2
+      if (value > 9) {
+        ((value % 10) :: sum._1, value / 10)
+      } else {
+        (value :: sum._1, 0)
+      }
+    }) match {
+      case (xs, carry) if carry > 0 => carry :: xs
+      case (xs, _) => xs
+    }
+  }
+
+  def execute (n1: List[Int], n2: List[Int]): List[Int] = {
+    (n2.foldRight((List.empty[Int], 0)) {
+      (elem, sum) => {
+       (Add.execute3(mult(n1, elem) ++ Util.zeroList(sum._2), sum._1), sum._2 + 1)
+      }
+    })._1
+  }
+}
 
 object Util {
   def calc(x: Int, y: Int): (Int, Int) =
