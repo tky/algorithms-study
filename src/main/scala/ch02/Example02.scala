@@ -22,6 +22,4 @@ object Example02 extends App {
   def dump(low: Int, high: Int): Unit = {
     println("low: %s hight: %s".format(low, high))
   }
-
-  println(tuns(2, 0, 10))
 }
