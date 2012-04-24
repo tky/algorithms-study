@@ -36,14 +36,36 @@ object Tuns extends App {
 */
 object Add extends App {
   def execute (n1: List[Int], n2: List[Int]): List[Int] = {
-    def calc(x: Int, y: Int): (Int, Int) =
-      if (x + y > 9) {
-        ((x + y) %  10, 1)
-      } else {(x + y, 0)}
-
     ((n1 zip n2).foldRight((List.empty[Int], 0)) {
-        (elem, sum) => calc(elem._1, elem._2) match {case (value, carry) => ((value + sum._2) :: sum._1, carry)}
+        (elem, sum) => Util.calc(elem._1, elem._2) match {case (value, carry) => ((value + sum._2) :: sum._1, carry)}
     })._1
   }
 
+
+  /**
+   * 桁違いのリストに対応版
+     最初に桁をあわせる処理を行い、最後にcarryが残っていれば先頭に追加。　
+  */
+  def execute2 (n1: List[Int], n2: List[Int]): List[Int] = {
+    (((n1, n2) match {
+      case (n1, n2) if n1.length > n2.length => n1 zip (Util.zeroList(n1.length - n2.length) ++ n2)
+      case (n1, n2) if n1.length < n2.length => (Util.zeroList(n2.length - n1.length) ++ n1) zip  n2 
+      case (n1, n2) => n1 zip n2
+    }).foldRight((List.empty[Int], 0)) {
+        (elem, sum) => Util.calc(elem._1, elem._2) match {case (value, carry) => ((value + sum._2) :: sum._1, carry)}
+    }) match {
+      case (xs, carry) if carry > 0 => 1 :: xs
+      case (xs, _) => xs
+    }
+  }
+}
+
+
+object Util {
+  def calc(x: Int, y: Int): (Int, Int) =
+    if (x + y > 9) {
+      ((x + y) %  10, 1)
+    } else {(x + y, 0)}
+
+  def zeroList(n: Int): List[Int] = if (n > 0) { 0 :: zeroList(n - 1)} else { Nil }
 }

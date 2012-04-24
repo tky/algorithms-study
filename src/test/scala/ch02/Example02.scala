@@ -21,4 +21,16 @@ class AddSpec extends Specification {
       Add.execute(List(0, 8), List(0, 4))  == List(1, 2)
     }
   }
+
+  "add2" should {
+    "1 2 + 1 3 5 = 1 4 7" in {
+      println(Add.execute2(List(1, 2), List(1, 3, 5)))
+      Add.execute2(List(1, 2), List(1, 3, 5)) == List(1, 4, 7)
+    }
+
+    "carry at 1 digit 8 + 4 = 1 2" in {
+      Add.execute2(List(8), List(4))  == List(1, 2)
+    }
+  }
 }
+
