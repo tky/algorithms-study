@@ -27,3 +27,19 @@ object QuickSort {
     case _ => Nil
   }
 }
+
+object CountingSort {
+  def max(xs: List[Int]): Int = xs.foldLeft(0){(x, y) => Math.max(x, y)}
+  def repeat[A](v: A, num: Int): List[A] = num match {
+    case 0 => Nil
+    case n => v :: repeat(v, num - 1)
+  }
+
+  def execute(xs: List[Int]): List[Int] = {
+    val bucket = new Array[Int](max(xs) + 1)
+    xs.foreach { x =>
+      bucket(x) = bucket(x) + 1
+    }
+    bucket.toList.zipWithIndex.foldLeft(List.empty[Int]){(sum, x) => sum ::: repeat(x._2, x._1)}
+  }
+}
